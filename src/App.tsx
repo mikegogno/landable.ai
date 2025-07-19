@@ -1,20 +1,20 @@
 import { Toaster } from "./components/ui/sonner";
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from "./components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from '@/context/ErrorBoundary';
+import ErrorBoundary from "./context/ErrorBoundary";
 
 // Context Providers
-import { AuthProvider } from '@/context/AuthContext';
-import { SubscriptionProvider } from '@/context/SubscriptionContext';
+import { AuthProvider } from "./context/AuthContext";
+import { SubscriptionProvider } from "./context/SubscriptionContext";
 
 // Add debugging
 console.log('App initialization started');
 
 // Layouts
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import DashboardLayout from './components/layout/DashboardLayout';
 
 // Pages
 import HomePage from './pages/HomePage';
