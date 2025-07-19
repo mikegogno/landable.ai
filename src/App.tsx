@@ -41,11 +41,11 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <SubscriptionProvider>
-        <TooltipProvider>
-          <Toaster position="top-center" />
-          <BrowserRouter>
+    <TooltipProvider>
+      <Toaster position="top-center" />
+      <BrowserRouter>
+        <AuthProvider>
+          <SubscriptionProvider>
             <div className="flex min-h-screen flex-col">
               <Routes>
                 {/* Marketing Pages */}
@@ -79,10 +79,10 @@ const App = () => (
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </div>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SubscriptionProvider>
-    </AuthProvider>
+          </SubscriptionProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 
