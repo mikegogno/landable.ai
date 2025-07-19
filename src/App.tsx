@@ -2,10 +2,14 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ErrorBoundary from '@/context/ErrorBoundary';
 
 // Context Providers
 import { AuthProvider } from '@/context/AuthContext';
 import { SubscriptionProvider } from '@/context/SubscriptionContext';
+
+// Add debugging
+console.log('App initialization started');
 
 // Layouts
 import Navbar from '@/components/layout/Navbar';
@@ -40,14 +44,15 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster position="top-center" />
-      <BrowserRouter>
-        <AuthProvider>
-          <SubscriptionProvider>
-            <div className="flex min-h-screen flex-col">
-              <Routes>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster position="top-center" />
+        <BrowserRouter>
+          <AuthProvider>
+            <SubscriptionProvider>
+              <div className="flex min-h-screen flex-col">
+                <Routes>
                 {/* Marketing Pages */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
@@ -84,6 +89,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

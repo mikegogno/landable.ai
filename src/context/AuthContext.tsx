@@ -32,17 +32,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const fetchSession = async () => {
       try {
+        console.log('Fetching Supabase session');
         // Get current session
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Supabase session error:', error);
+          toast.error('Failed to connect to authentication service');
+          setIsLoading(false);
+          return;
+        }
+        
+        console.log('Session fetched successfully:', data.session ? 'Found session' : 'No session');
+        const currentSession = data.session;
         setSession(currentSession);
         setUser(currentSession?.user || null);
         
         if (currentSession?.user) {
+          console.log('User logged in, fetching profile');
           const userProfile = await handleUserSession(currentSession);
           setProfile(userProfile);
         }
       } catch (error) {
         console.error('Error fetching session:', error);
+        toast.error('An error occurred during authentication');
       } finally {
         setIsLoading(false);
       }
@@ -97,10 +110,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Sign in with Google
   const signInWithGoogle = async () => {
     try {
+      console.log('Starting Google sign-in process');
+      // Use absolute URL for Vercel deployment
+      const redirectUrl = window.location.hostname.includes('vercel.app') 
+        ? 'https://landable-ai.vercel.app/dashboard' 
+        : `${window.location.origin}/dashboard`;
+      
+      console.log('Redirect URL:', redirectUrl);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -109,6 +130,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (error) {
+        console.error('OAuth error:', error);
         toast.error(error.message);
       }
     } catch (error) {
